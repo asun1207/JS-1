@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Ajax</title>
+  </head>
+  <body>
+    <table border="1">
+      <thead>
+        <th>ID</th>
+        <th>Product Name</th>
+        <th>Price</th>
+        <th>Amount</th>
+        <th>Total</th>
+      </thead>
+      <tbody></tbody>
+      <tfoot>
+        <td colspan="3">Total Invoice:</td>
+        <td colspan="2">Invoice</td>
+      </tfoot>
+    </table>
+  </body>
+  <!-- <script src="productClass.js" type="text/js"></script> -->
+  <script type="module">
+    import product from "./productClass.js";
+    let products = new Array();
+    let sum = 0;
+    const tablePop = () => {
+      for (let pr of products) {
+        for (let pr of products) {
+          const tr = document.createElement("tr");
+          for (let prop in pr) {
+            const td = document.createElement("td");
+            td.innerText = pr[prop];
+            tr.append(td);
+          }
+          const td = document.createElement("td");
+          document.querySelector("tbody").appendChild("tr");
+        }
+      }
+    };
+    const httpReq = new XMLHttpRequest();
+    //httpReq.onreadystatechange = function () {
+    //  console.log(this.readyState);
+    //handler
+    //when you call this it will bring httpReq
+    //console.log(this.response);
+    //  if (this.readyState == 4 && this.status == 200) {
+    //    console.log(this.response);
+    //  }
+    //};
+    // get
+    httpReq.onload = () => {
+      console.log(JSON.parse(httpReq.response));
+      //create an array of product objects using the httpReq.response
+      for (let pr of JSON.parse(httpReq.response)) {
+        let productObj = new product(pr.id, pr.pname, pr.price, pr.amount);
+        products.push(productObj);
+      }
+    };
+
+    httpReq.open("GET", "invoice.json", true);
+    httpReq.send();
+  </script>
+</html>

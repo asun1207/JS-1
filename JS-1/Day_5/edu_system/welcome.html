@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <h1>Welcome</h1>
+    <table border="1">
+      <thead>
+        <tr>
+          <th>Course ID</th>
+          <th>Course Name</th>
+          <th colspan="2">Instructor</th>
+          <th>Options</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </body>
+  <script type="module">
+    import student from "./classes/studentClass.js";
+    import course from "./classes/courseClass.js";
+    let studentObj = null;
+    let courseList = null;
+    let teacherList = null;
+    let fullCourse = [];
+    const tablePoper = () => {
+      const tbody = document.querySelectorAll("tbody")[0];
+      for (let course of fullCourse) {
+        tbody.append(course.toTr());
+      }
+    };
+    const coursePoper = () => {
+      for (let cr of courseList) {
+        //looping through the courses
+        for (let teach of teacherList) {
+          //looping through the teachers
+          if (teach.tid == cr.tid) {
+            //matching the tid of the course with the tid of the teacher
+            let courseObj = new course(cr.cid, cr.cname, teach.fname, teach.lname);
+            fullCourse.push(courseObj);
+            break;
+          }
+        }
+      }
+      // console.log(fullCourse[0].toTr());
+      tablePoper();
+    };
+    if (localStorage.getItem("sc") == undefined) {
+      localStorage.setItem("sc", "[]");
+    }
+    if (sessionStorage.getItem("u") == undefined) {
+      location.replace("login.html");
+    } else {
+      let tmpStu = JSON.parse(sessionStorage.getItem("u"));
+      studentObj = new student(tmpStu.stid, tmpStu.fname, tmpStu.lname, tmpStu.email);
+      const httpReq = new XMLHttpRequest();
+      httpReq.onload = () => {
+        if (httpReq.status == 200) {
+          courseList = JSON.parse(httpReq.response);
+        }
+      };
+      httpReq.open("GET", "courseList.json", true);
+      httpReq.send();
+      const httpReqTeacher = new XMLHttpRequest();
+      httpReqTeacher.onload = () => {
+        if (httpReqTeacher.status == 200) {
+          teacherList = JSON.parse(httpReqTeacher.response);
+          coursePoper();
+        }
+      };
+      httpReqTeacher.open("GET", "teacherList.json", true);
+      httpReqTeacher.send();
+    }
+  </script>
+</html>

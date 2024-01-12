@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Milad</title>
+  </head>
+  <body></body>
+  <script>
+    //write a function which accepts 2 parameters as follow:
+    //arr (to get an array)
+    //order (to get the type of sort order [0,1] 0=Accending and 1=Decending) Can be optional
+    //This function shall sort the array using a new array and return the array to the main caller.
+    function arraySort(arr, order = 0) {
+      switch (order) {
+        case 0:
+          for (let a = 0; a <= arr.length - 1; a++) {
+            for (let b = a + 1; b <= arr.length - 1; b++) {
+              if (arr[a] > arr[b]) {
+                let tmp = arr[a];
+                arr[a] = arr[b];
+                arr[b] = tmp;
+              }
+            }
+          }
+          break;
+        case 1:
+          for (let a = 0; a <= arr.length - 1; a++) {
+            for (let b = a + 1; b <= arr.length - 1; b++) {
+              if (arr[a] < arr[b]) {
+                let tmp = arr[a];
+                arr[a] = arr[b];
+                arr[b] = tmp;
+              }
+            }
+          }
+          break;
+      }
+      return arr;
+    }
+    const numbers = [10, 5, 3, 4, 7, 20, 1, 0, 12];
+    // for(let a = 0;a <= numbers.length-1; a++){
+    //     for(let b = a + 1;b <= numbers.length-1; b++){
+    //         if(numbers[a] < numbers[b]){
+    //             let tmp = numbers[a];
+    //             numbers[a] = numbers[b];
+    //             numbers[b] = tmp;
+    //         }
+    //     }
+    // }
+
+    // console.log(arraySort(numbers,1));
+    // console.log(numbers);
+
+    ///////////Multi-dimension array
+    const students = [
+      [
+        [3, 4, 5],
+        [3, 2, 1],
+      ],
+      [
+        [5, 6, 10],
+        [10, 5, 12],
+      ],
+    ];
+    for (let i = 0; i < students.length; i++) {
+      // for in
+      let table = document.createElement("table");
+      table.border = 1;
+      for (let j = 0; j < students[i].length; j++) {
+        // for in
+        let tr = document.createElement("tr");
+        for (let k = 0; k < students[i][j].length; k++) {
+          // for of
+          let td = document.createElement("td");
+          td.innerText = students[i][j][k];
+          tr.appendChild(td);
+        }
+        table.appendChild(tr);
+      }
+      document.querySelector("body").appendChild(table);
+    }
+  </script>
+</html>

@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>DOM</title>
+    <style>
+      .box {
+        background-color: azure;
+        border: 1px solid blue;
+        width: 50px;
+        height: 50px;
+        border-radius: 5px;
+        margin-top: 5px;
+        font-size: xx-large;
+        text-align: center;
+      }
+      .box:hover {
+        background-color: aquamarine;
+      }
+      .active {
+        background-color: blue;
+        color: white;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <button type="button">Add</button>
+      <button type="button" disabled>Remove</button>
+      <button type="button" disabled>UP</button>
+      <button type="button" disabled>DOWN</button>
+    </header>
+    <main>
+      <!--
+      <div class="box">1</div>
+      <div>1</div>
+      <div>2</div>
+      <div>3</div>-->
+    </main>
+  </body>
+  <script>
+    /*
+    console.log(document.querySelector("div").childNodes);
+
+    //it returen HTML Collection
+    console.log(document.querySelector("div").children);
+    console.log(document.querySelector("main").parentNode);
+
+    //if i write firstChild, i selecte text
+    console.log(document.querySelector("main").firstElementChild);
+    console.log(document.querySelector("main").lastElementChild);
+
+    //
+    console.log(document.querySelectorAll("div")[0].nextElementSibling);
+    console.log(document.querySelectorAll("div")[1].previousElementSibling);
+    */
+
+    //e parameter: type of the event, target of the event
+    let selectedItem = null;
+    const btDisable = () => {
+      for (let i of [1, 2, 3]) {
+        document.querySelectorAll("button")[i].setAttribute("disabled", "");
+      }
+    };
+    const maxFinder = () => {
+      let mainChildren = document.querySelector("main").children;
+      if (mainChildren.length != 0) {
+        let max = 0;
+        for (let box of mainChildren) {
+          if (max < parseInt(box.innerText)) {
+            max = parseInt(box.innerText);
+          }
+        }
+      }
+      return max + 1;
+    };
+    document.querySelectorAll("button")[0].addEventListener("click", () => {
+      //generate a div element with box as its class and append it to the main tag
+      let box = document.createElement("div");
+      box.classList.add("box");
+      box.innerText = document.querySelector("main").children.length + 1;
+      box.addEventListener("click", (e) => {
+        if (selectedItem != null) {
+          document.querySelector(".active").classList.remove("active");
+        }
+        if (e.target.selectedItem) {
+          selectedItem = null;
+          for (let i of [1, 2, 3]) {
+            document.querySelectorAll("button")[i].setAttribute("disabled", "");
+          }
+        } else {
+          e.target.classList.add("active");
+          selectedItem = e.target;
+          for (let bt of document.querySelectorAll("button")) {
+            bt.removeAttribute("disabled");
+          }
+        }
+      });
+      if (selectedItem != null) {
+        let main = document.querySelector("main");
+        let nextSibling = selectedItem.nextElementSibling;
+        main.insertBefore(box, nextSibling);
+        //main is the container
+        //first parameter is an HTML element
+        //second parameter is the existing child that the new item shall be added before that child
+      } else {
+        document.querySelector("main").appendChild(box);
+      }
+      //console.log(document.querySelector("main").children.length);
+    });
+    document.querySelectorAll("button")[1].addEventListener("click", () => {
+      selectedItem.remove();
+      selectedItem = null;
+      btDisable();
+    });
+  </script>
+</html>

@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body></body>
+  <script>
+    const loadInvoice = (invoiceData) => {
+      console.log(invoiceData);
+    };
+    const errorFun = (msg) => {
+      alert(msg);
+    };
+    let loadPromise = new Promise((load, error) => {
+      let httpReq = new XMLHttpRequest();
+      httpReq.onload = () => {
+        if (httpReq.status == 200) load(httpReq.response);
+        else error(httpReq.statusText);
+      };
+      httpReq.open("GET", "invoice.json");
+      httpReq.send();
+    }).then(loadInvoice, errorFun);
+  </script>
+</html>

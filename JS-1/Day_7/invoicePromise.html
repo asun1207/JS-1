@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Invoice Promise</title>
+  </head>
+  <body>
+    <table border="1">
+      <thead>
+        <tr>
+          <th>Product ID</th>
+          <th>Product Name</th>
+          <th>Price ($)</th>
+          <th>Amount</th>
+          <th>Total ($)</th>
+          <th colspan="2">Options</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+      <tfoot>
+        <tr>
+          <td colspan="3" style="text-align: right"><strong>Totals:</strong></td>
+          <td></td>
+          <td></td>
+        </tr>
+      </tfoot>
+    </table>
+  </body>
+  <script type="module">
+    import product from "./productClass (1).js";
+    let productObj = null;
+    let cleanInvData = null;
+    const productList = [];
+    let sum = 0;
+    let prodsum = 0;
+
+    // Function to populate the table with the products object information
+    const populateTable = () => {
+      const tbody = document.querySelector("tbody");
+      // For each product in productList:
+      for (let pr of productList) {
+        // Take the products total (from the total property in the product object) and add it to the sum so we can get the total amount to pay
+        sum += parseFloat(pr.total);
+        // Take the products amounts (from the total property in the product object) and add it to the prodsum so we can get the total amount of products
+        prodsum += parseInt(pr.amount);
+
+        // Run the toRow method inside the product object class and append the returned row to the tbody of the table
+        tbody.append(pr.toRow());
+      }
+      // Show the sum in the total column of the table footer
+      document.querySelector("tfoot tr").children[1].innerText = prodsum;
+      document.querySelector("tfoot tr").children[2].innerText = "$" + sum.toFixed(2);
+
+      // Store sum information to storage so we can later it when clicking on delete button
+      sessionStorage.setItem("Pay", parseFloat(sum).toFixed(2));
+      sessionStorage.setItem("Products", parseInt(prodsum));
+    };
+
+    // THIS HAPPENS IF PROMISE SUCCESSFUL
+    // loadInvoice func will take the httpReq response as the argument called invoiceData.
+    const loadInvoice = (invoiceData) => {
+      // Parse the invoiceData so we can use it
+      cleanInvData = JSON.parse(invoiceData);
+
+      // For each item in the cleanInvData, create a new product instance with the defined properties and push it to the productList list.
+      for (let item of cleanInvData) {
+        productObj = new product(item.id, item.pname, item.price, item.amount);
+        productList.push(productObj);
+      }
+      populateTable();
+    };
+
+    // THIS HAPPENS IF PROMISE FAILED
+    const errorFun = (msg) => {
+      // Window will display an alert with the statusText message as the argument.
+      alert(msg);
+    };
+
+    // THIS HAPPENS FIRST
+    // Create a promise
+    let loadPromise = new Promise((load, error) => {
+      let httpReq = new XMLHttpRequest();
+      httpReq.onload = () => {
+        // When the page loads, if the http request status is 200, then run the load func (resolve) promise with the http response's data.
+        if (httpReq.status == 200) {
+          load(httpReq.response);
+
+          // Else, run the error func (reject) with the statusText information data
+        } else {
+          error(httpReq.statusText);
+        }
+      };
+      httpReq.open("GET", "invoice.json");
+      httpReq.send();
+
+      // loadInvoice is the load func (resolve, success) ... errorFun is the error function (reject, fail)
+    }).then(loadInvoice, errorFun);
+  </script>
+</html>

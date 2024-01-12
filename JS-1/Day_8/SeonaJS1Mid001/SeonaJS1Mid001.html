@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SeonaJS1Mid001.html</title>
+  </head>
+  <body>
+    <div class="inputs">
+      <input />
+      <input />
+      <input />
+    </div>
+    <table border="1">
+      <thead>
+        <tr>
+          <th>Employeeid</th>
+          <th>Name</th>
+          <th>Employee years</th>
+          <th>Married</th>
+          <th>Children</th>
+          <th>Salary</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </body>
+  <script type="module">
+    import employee from "./classes/employeeClass.js";
+    let employeeObj = null;
+    let loadedEmp = null;
+    let employeeList = [];
+    // input background color = yellow
+    for (let input of document.querySelectorAll("input")) {
+      input.addEventListener("focus", (e) => {
+        e.target.style.backgroundColor = "yellow";
+      });
+      input.addEventListener("blur", (e) => {
+        e.target.style.backgroundColor = "white";
+      });
+    }
+
+    const tablePop = () => {
+      const tbody = document.querySelectorAll("tbody")[0];
+      const id = JSON.parse();
+      for (let em of employeeList) {
+        if (em.married) {
+          salarysum *= 0.15;
+        }
+        if (em.children) {
+          salarysum *= 0.15;
+        }
+        if (em.years > 4) {
+          salarysum *= 0.1;
+        }
+        tbody.append(em.toTr());
+      }
+    };
+    const loadEmp = (employeeData) => {
+      loadedEmp = JSON.parse(employeeData);
+      for (let item of loadedEmp) {
+        let employeeObj = new employee(em.id, em.fname, em.lname, em.years, em.married, em.children);
+        employeeList.push(employeeObj);
+      }
+      tablePop();
+    };
+
+    const httpReq = new XMLHttpRequest();
+    httpReq.onload = () => {
+      if (httpReq.status == 200) {
+        employeeList = JSON.parse(httpReq.response);
+        tablePop();
+      }
+    };
+    httpReq.open("GET", "emplistV3.json", true);
+    httpReq.send();
+  </script>
+</html>

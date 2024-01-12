@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Multi Array</title>
+  </head>
+  <body></body>
+  <script>
+    // var is global variable, it's hard to team work, and
+    // let is local variable
+    // hoisting
+    const names = ["a", "b"];
+    let mark;
+
+    // it can not accept
+    names = "hey";
+
+    // it will show up like "a, b, hey"
+    names[2] = "hey";
+
+    ///////////////////////////////////////////////////
+    const names = ["a", "b", "s"];
+
+    // splice(1, 2) => 1 is start to index number, 2 is deleting number
+    names.splice(1, 2);
+
+    // start to idex 1,  delete 1 number, and push up in array
+    names.splice(1, 1, "Matt", "Garret");
+
+    // it will show sort
+    console.log(names.sort());
+
+    //
+    const marks = [10, 56, 45, 2, 34, 78];
+    marks.sort();
+    console.log(marks);
+
+    //swap(a and b) == sort small to big
+    const numbers = [10, 5, 3, 4, 7, 20, 1, 0, 12];
+    for (let a = 0; a <= numbers.length - 1; a++) {
+      for (let b = a + i; b <= numbers.length - 1; b++) {
+        //if I want to change sort big to small I can write decresendo
+        if (numbers[a] > numbers[b]) {
+          let tmp = numbers[a];
+          numbers[a] = numbers[b];
+          numbers[b] = tmp;
+        }
+      }
+    }
+    //write a function which accepts 2 parameters as follow:
+    //arr (to get an array)
+    //order (to get the type of sort order [0, 1] 0=Accending and 1=Decending) Can be optional
+    //This function shall sort the array using a new array and return the array to the main caller.
+    function arraySort(arr, order = 0) {
+      switch (order) {
+        case 0:
+          for (let a = 0; a <= arr.length - 1; a++) {
+            for (let b = a + 1; b <= arr.length - 1; b++) {
+              if (arr[a] < arr[b]) {
+                let tmp = numbersp[a];
+                arr[a] = arr[b];
+                arr[b] = tmp;
+              }
+            }
+          }
+          break;
+        case 1:
+          for (let a = 0; a <= arr.length - 1; a++) {
+            for (let b = a + 1; b <= arr.length - 1; b++) {
+              if (arr[a] < arr[b]) {
+                let tmp = numbersp[a];
+                arr[a] = arr[b];
+                arr[b] = tmp;
+              }
+            }
+          }
+          break;
+      }
+    }
+    return tmpArr;
+    console.log(arraySort(numbers, 1));
+    console.log(numbers);
+
+    //Multi-dimension array
+    /*
+    const students = [
+      ["Sun", "Yu", "Kim", "Otoha"],
+      ["Matt", "Garret", "John", "Sara"],
+    ];
+    */
+    students[1][2];
+    const students = [
+      [
+        [3, 4, 5],
+        [3, 2, 1],
+      ],
+      [
+        [5, 6, 10],
+        [10, 5, 12],
+      ],
+    ];
+    //console.log(students[0][1][1]); // output is 2
+    for (let i = 0; i < students.length; i++) {
+      let table = document.createElement("table");
+      table.border = 1;
+      for (let j = 0; j < students[i].length; j++) {
+        //for in
+        let tr = document.createElement("tr");
+        for (let k = 0; k < students[i][j].length; k++) {
+          //for of
+          let td = document.createElement("td");
+          td.innerText = students[i][j][k];
+          tr.appendChild(td);
+        }
+        table.appendChild(tr);
+      }
+      document.querySelector("body").appendChild(table);
+    }
+  </script>
+</html>

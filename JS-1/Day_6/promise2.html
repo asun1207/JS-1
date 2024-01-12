@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <input type="number" />
+    <button type="button">Add Student</button>
+    <table border="1">
+      <thead>
+        <tr>
+          <td>Student Name</td>
+          <td>Mark</td>
+        </tr>
+      </thead>
+      <tbody></tbody>
+      <tfoot>
+        <td>Average of the class:</td>
+        <td></td>
+      </tfoot>
+    </table>
+  </body>
+  <script>
+    // When user clicked on the add student button, using a promise object get the student name and mark from the input box and add it to the table. You need to calculate the average of the class at the same time.
+    // If name is empty or mark is zero, change the background color of the empty input elements and show an alert message.
+    const resultFun = (result) => {
+      document.querySelector("h2").innerText += result;
+    };
+    const rejFun = (reason) => {
+      alert(reason);
+    };
+    const clickhandler = () => {
+      let promiseObject = new Promise((resFun, rejFun) => {
+        let num1 = document.querySelectorAll("input")[0].value;
+        let num2 = document.querySelectorAll("input")[1].value;
+        if (num2 != 0) {
+          resFun(num1 / num2);
+        } else {
+          rejFun("Second number shall not be zero.");
+        }
+      }).then(resultFun, rejFun);
+    };
+    document.querySelector("button").addEventListener("click", clickhandler);
+  </script>
+</html>

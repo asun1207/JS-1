@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <input type="text" placeholder="name" />
+    <input type="number" placeholder="number" />
+    <button type="button">Add Student</button>
+    <table border="1">
+      <thead>
+        <tr>
+          <td>Student Name</td>
+          <td>Mark</td>
+        </tr>
+      </thead>
+      <tbody></tbody>
+      <tfoot>
+        <td>Average of the class:</td>
+        <td></td>
+      </tfoot>
+    </table>
+  </body>
+  <script>
+    // When user clicked on the add student button, using a promise object get the student name and mark from the input box and add it to the table. You need to calculate the average of the class at the same time.
+    // If name is empty or mark is zero, change the background color of the empty input elements and show an alert message.
+    let sum = 0;
+    const addFun = (stInfo) => {
+      let tr = document.createElement("tr");
+      for (let st of stInfo) {
+        let td = document.createElement("td");
+        td.innerText = st;
+        tr.append(td);
+      }
+      document.querySelector("tbody").append(tr);
+      sum += parseFloat(stInfo[1]);
+      let avg = sum / document.querySelector("tbody").children.length;
+      document.querySelector("tfoot tr").children[1].innerText = avg.toFixed(2);
+    };
+    const errorFun = (idx) => {
+      document.querySelectorAll("input")[idx].style.backgroundColor = "yellow";
+    };
+    const addStudent = () => {
+      const studentPromise = new Promise((add, error) => {
+        const stInfo = [];
+        let errorFlag = false;
+        stInfo[0] = document.querySelectorAll("input")[0].value;
+        stInfo[1] = document.querySelectorAll("input")[1].value;
+        for (let idx in stInfo) {
+          if (stInfo[idx] == "" || stInfo[idx] == 0) {
+            error(idx);
+            errorFlag = true;
+          }
+        }
+        if (!errorFlag) {
+          add(stInfo);
+        }
+      }).then(addFun, errorFun);
+    };
+    document.querySelector("button").addEventListener("click", addStudent);
+  </script>
+</html>

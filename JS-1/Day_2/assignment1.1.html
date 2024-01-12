@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Assignment 1.1</title>
+    <style>
+      .yellow-bg {
+        background-color: yellow;
+      }
+      .blue-bg {
+        background-color: blue;
+      }
+    </style>
+  </head>
+  <body>
+    <script>
+      const students = [
+        [
+          [3, 4, 5],
+          [3, 2, 1],
+        ],
+        [
+          [5, 6, 10],
+          [10, 5, 12],
+        ],
+      ];
+      for (let i = 0; i < students.length; i++) {
+        let table = document.createElement("table");
+        table.border = 1;
+        for (let j = 0; j < students[i].length; j++) {
+          let tr = document.createElement("tr");
+          for (let k = 0; k < students[i][j].length; k++) {
+            let td = document.createElement("td");
+            td.innerText = students[i][j][k];
+            if (students[i][j][k] % 2 === 0) {
+              td.classList.add("blue-bg");
+            } else {
+              td.classList.add("yellow-bg");
+            }
+            tr.appendChild(td);
+          }
+          table.appendChild(tr);
+        }
+        document.querySelector("body").appendChild(table);
+      }
+    </script>
+  </body>
+</html>

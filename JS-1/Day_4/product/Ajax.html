@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <table border="1">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Product Name</th>
+          <th>Price</th>
+          <th>Amount</th>
+          <th>Total</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+      <tfoot>
+        <tr>
+          <td colspan="3">Total Invoice:</td>
+          <td colspan="2"></td>
+        </tr>
+      </tfoot>
+    </table>
+  </body>
+  <!-- <script src="./classes/productClass.js"></script> -->
+  <script type="module">
+    import product from "./classes/productClass.js";
+    let products = new Array();
+    let sum = 0;
+    const tablePop = () => {
+      for (let pr of products) {
+        const tr = document.createElement("tr");
+        for (let prop in pr) {
+          const td = document.createElement("td");
+          td.innerText = pr[prop];
+          tr.append(td);
+        }
+        const td = document.createElement("td");
+        sum += pr.total(); // sum = sum + total
+        td.innerText = parseFloat(pr.total()).toFixed(2);
+        tr.append(td);
+        document.querySelector("tbody").append(tr);
+      }
+      document.querySelectorAll("tfoot tr td")[1].innerText = sum.toFixed(2);
+    };
+    const httpReq = new XMLHttpRequest();
+    // httpReq.onreadystatechange = function(){ //handler
+    //     if(this.readyState==4 && this.status==200){
+    //         console.log(this.response);
+    //     }
+    // }
+    httpReq.onload = () => {
+      //create an array of product objects using the httpReq.response
+      for (let pr of JSON.parse(httpReq.response)) {
+        let productObj = new product(pr.id, pr.pname, pr.price, pr.amount);
+        products.push(productObj);
+      }
+      tablePop();
+    };
+    httpReq.open("GET", "invoice.json", true);
+    httpReq.send();
+  </script>
+</html>

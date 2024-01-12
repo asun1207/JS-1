@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>Welcome</h1>
+    <h2></h2>
+</body>
+<script type="module">
+    import student from "./classes/studentClass.js";
+    let studentObj = null;
+    let courseList = null;
+    let teacherList = null;
+    let fullCourse = [];
+    const coursePoper = () =>{        
+        for(let cr of courseList){ //looping through the courses
+            
+            for(let teach of teacherList){ //looping through the teachers
+                if(teach.tid == cr.tid){ //matching the tid of the course with the tid of the teacher
+                    let tmpcourse = {
+                        cid:cr.cid,
+                        cname:cr.cname,
+                        fname:teach.fname,
+                        lname:teach.lname
+                    }
+                    fullCourse.push(tmpcourse)
+                    break;
+                }
+            }
+        }
+        console.log(fullCourse);
+    }
+    if(sessionStorage.getItem("u")==undefined){
+        location.replace("login.html");
+    }else{
+        let tmpStu = JSON.parse(sessionStorage.getItem("u"));
+        studentObj = new student(tmpStu.stid,tmpStu.fname,tmpStu.lname,tmpStu.email);
+        document.querySelector("h2").innerText = `${studentObj.fname} ${studentObj.lname}`;
+        const httpReq = new XMLHttpRequest();
+        httpReq.onload = ()=>{
+            if(httpReq.status == 200){
+                courseList = JSON.parse(httpReq.response);
+            }
+        }
+        httpReq.open("GET","courseList.json",true);
+        httpReq.send();
+        const httpReqTeacher = new XMLHttpRequest();
+        httpReqTeacher.onload = ()=>{
+            if(httpReqTeacher.status == 200){
+                teacherList = JSON.parse(httpReqTeacher.response);
+                coursePoper();
+            }
+        }
+        httpReqTeacher.open("GET","teacherList.json",true);
+        httpReqTeacher.send();
+
+    }
+</script>
+</html>
